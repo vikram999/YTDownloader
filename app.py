@@ -2,6 +2,10 @@ import streamlit as st
 import yt_dlp
 import os
 
+
+output_dir = os.path.join(os.path.expanduser("~"), "Downloads", "YouTube")
+os.makedirs(output_dir, exist_ok=True)
+
 # ---------- CSS + HTML Header with Logo and Navigation ----------
 st.markdown(
     """
@@ -161,6 +165,7 @@ with c2:
         ydl_opts = {
             'logger': MyLogger(),
             'progress_hooks': [my_hook],
+            'outtmpl': os.path.join(output_dir, '%(title)s.%(ext)s'),
         }
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             try:
