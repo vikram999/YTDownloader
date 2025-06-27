@@ -170,14 +170,27 @@ with c2:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             try:
                 st.badge("downloading...", color="blue",icon="⏬")
-                ydl.download(URLS)
+                st.success(url)
+                info = ydl.extract_info(url, download=True)
+                #st.success(info)
+                filename = ydl.prepare_filename(info)
                 error_code = 0
             except Exception as err:
                 error_code = -1
             if error_code == 0:
-                 st.success("Downloaded Successfully")
+                # Provide download link
+                with open(filename, 'rb') as f:
+                    st.download_button(
+                    label="Download Video",
+                    data=f,
+                    file_name=os.path.basename(filename),
+                    mime='video/mp4'
+                    )
+                st.success("Downloaded Successfully")
             else:
                 st.error("Error:Please check URL",icon="⚠️")
+        
+        
 # ---------- Footer with Social Icons ----------
 st.markdown(
     """
